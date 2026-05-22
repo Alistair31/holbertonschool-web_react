@@ -10,31 +10,31 @@ interface TeacherInterface {
     workTeacherTasks(): string
 }
 
-class Director implements DirectorInterface {
-	workFromHome() {
-		return 'Working from home'
+export const Director = class Director implements DirectorInterface {
+	workFromHome(): string {
+		return 'Working from home';
 	}
-    getCoffeeBreak() {
-		return 'Getting a coffee break'
+	getCoffeeBreak(): string {
+		return 'Getting a coffee break';
 	}
-    workDirectorTasks() {
-		return 'Getting to director tasks'
+	workDirectorTasks(): string {
+		return 'Getting to director tasks';
 	}
-}
+};
 
-class Teacher implements TeacherInterface {
-	workFromHome() {
-		return 'Cannot work from home'
+export const Teacher = class Teacher implements TeacherInterface {
+	workFromHome(): string {
+		return 'Cannot work from home';
 	}
-	getCoffeeBreak() {
-		return 'Cannot have a break'
+	getCoffeeBreak(): string {
+		return 'Cannot have a break';
 	}
-	workTeacherTasks() {
-		return 'Getting to work'
+	workTeacherTasks(): string {
+		return 'Getting to work';
 	}
-}
+};
 
-export function createEmployee(salary: number | string): Director | Teacher {
+export function createEmployee(salary: number | string): DirectorInterface | TeacherInterface {
 	if (typeof salary === 'number' && salary < 500) {
 		return new Teacher();
 	}
@@ -45,16 +45,15 @@ console.log(createEmployee(200));
 console.log(createEmployee(1000));
 console.log(createEmployee('$500'));
 
-function isDirector(employee: Director | Teacher): employee is Director {
-  return employee instanceof Director;
+export function isDirector(employee: DirectorInterface | TeacherInterface): employee is DirectorInterface {
+	return (employee as DirectorInterface).workDirectorTasks !== undefined;
 }
 
-
-function executeWork(employee: Director | Teacher): string {
-  if (isDirector(employee)) {
-    return employee.workDirectorTasks();
-  }
-  return employee.workTeacherTasks();
+export function executeWork(employee: DirectorInterface | TeacherInterface): string {
+	if (isDirector(employee)) {
+		return employee.workDirectorTasks();
+	}
+	return employee.workTeacherTasks();
 }
 
 export function teachClass(todayClass: 'Math' | 'History'): string {
